@@ -59,6 +59,18 @@ export const App = () => {
         e.preventDefault();
         dispatch({ type: 'SET_JUMP_TO_ROW', payload: { isOpen: true } });
       }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          dispatch({ type: 'REDO' });
+        } else {
+          dispatch({ type: 'UNDO' });
+        }
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+        e.preventDefault();
+        dispatch({ type: 'REDO' });
+      }
       if (e.key === 'Escape') {
         dispatch({ type: 'SET_SELECTION', payload: { active: false, anchorRowId: null, anchorBlockIndex: null, focusRowId: null, focusBlockIndex: null } });
         dispatch({ type: 'CLOSE_SLASH_MENU' });

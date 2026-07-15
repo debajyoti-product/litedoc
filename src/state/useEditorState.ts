@@ -6,7 +6,7 @@
  * action-based updates. Persists rows to localStorage on change and on
  * page unload.
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { EditorState } from '../types';
 import { createRow } from '../utils/model';
 
@@ -17,6 +17,8 @@ export interface ExtendedEditorState extends EditorState {
   selectionMenu: { isOpen: boolean, step: 'main' | 'save_template' };
   isHelpOpen: boolean;
 }
+
+type HistorySnapshot = Pick<ExtendedEditorState, 'rows' | 'activeRowId' | 'selection' | 'activeTableCell'>;
 
 const getInitialState = (): ExtendedEditorState => {
   try {
@@ -54,6 +56,11 @@ const getInitialState = (): ExtendedEditorState => {
 
 export const useEditorState = () => {
   const [state, setState] = useState<ExtendedEditorState>(getInitialState);
+  const historyRef = useRef<{ past: HistorySnapshot[], future: HistorySnapshot[], lastSavedTextTime: number }>({
+    past: [],
+    future: [],
+    lastSavedTextTime: 0
+  });
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,13 +87,63 @@ export const useEditorState = () => {
     setState(prev => {
       let newState = { ...prev };
       
+      const recordHistory = (debounceText = false) => {
+        const now = Date.now();
+        if (debounceText) {
+          if (now - historyRef.current.lastSavedTextTime < 1000) {
+            historyRef.current.lastSavedTextTime = now;
+            return;
+          }
+          historyRef.current.lastSavedTextTime = now;
+        }
+        
+        historyRef.current.past.push({
+          rows: JSON.parse(JSON.stringify(prev.rows)),
+          activeRowId: prev.activeRowId,
+          selection: JSON.parse(JSON.stringify(prev.selection)),
+          activeTableCell: prev.activeTableCell ? { ...prev.activeTableCell } : null
+        });
+        if (historyRef.current.past.length > 100) {
+          historyRef.current.past.shift();
+        }
+        historyRef.current.future = [];
+      };
+
       switch (action.type) {
+        case 'UNDO': {
+          if (historyRef.current.past.length > 0) {
+            const previous = historyRef.current.past.pop()!;
+            historyRef.current.future.push({
+              rows: JSON.parse(JSON.stringify(prev.rows)),
+              activeRowId: prev.activeRowId,
+              selection: JSON.parse(JSON.stringify(prev.selection)),
+              activeTableCell: prev.activeTableCell ? { ...prev.activeTableCell } : null
+            });
+            newState = { ...newState, ...previous };
+          }
+          break;
+        }
+        case 'REDO': {
+          if (historyRef.current.future.length > 0) {
+            const next = historyRef.current.future.pop()!;
+            historyRef.current.past.push({
+              rows: JSON.parse(JSON.stringify(prev.rows)),
+              activeRowId: prev.activeRowId,
+              selection: JSON.parse(JSON.stringify(prev.selection)),
+              activeTableCell: prev.activeTableCell ? { ...prev.activeTableCell } : null
+            });
+            newState = { ...newState, ...next };
+          }
+          break;
+        }
         case 'UPDATE_ROW': {
+          recordHistory(true);
           const { id, content } = action.payload;
           newState.rows = prev.rows.map(r => r.id === id ? { ...r, content } : r);
           break;
         }
         case 'UPDATE_TABLE_CELL': {
+          recordHistory(true);
           const { id, r, c, content } = action.payload;
           newState.rows = prev.rows.map(row => {
             if (row.id === id && row.tableData) {
@@ -101,6 +158,7 @@ export const useEditorState = () => {
           break;
         }
         case 'RESIZE_TABLE': {
+          recordHistory(false);
           const { id, rDelta, cDelta } = action.payload;
           newState.rows = prev.rows.map(row => {
             if (row.id === id && row.tableData) {
@@ -140,6 +198,7 @@ export const useEditorState = () => {
           break;
         }
         case 'INSERT_ROW': {
+          recordHistory(false);
           const { afterId, row } = action.payload;
           const idx = prev.rows.findIndex(r => r.id === afterId);
           if (idx !== -1) {
@@ -152,6 +211,7 @@ export const useEditorState = () => {
           break;
         }
         case 'DELETE_ROW': {
+          recordHistory(false);
           const { id } = action.payload;
           if (prev.rows.length <= 1) {
             newState.rows = [{ ...prev.rows[0], content: '', type: 'text', tableData: undefined }];
@@ -167,6 +227,7 @@ export const useEditorState = () => {
           break;
         }
         case 'DELETE_MULTIPLE_ROWS': {
+          recordHistory(false);
           const { minIdx, maxIdx } = action.payload;
           if (minIdx === 0 && maxIdx === prev.rows.length - 1) {
             // Delete all
@@ -190,6 +251,7 @@ export const useEditorState = () => {
           break;
         }
         case 'INDENT_ROW': {
+          recordHistory(false);
           const { id, delta } = action.payload; 
           newState.rows = prev.rows.map(r => {
             if (r.id === id) {
@@ -201,6 +263,7 @@ export const useEditorState = () => {
           break;
         }
         case 'CHANGE_ROW_TYPE': {
+          recordHistory(false);
           const { id, type } = action.payload;
           newState.rows = prev.rows.map(r => r.id === id ? { ...r, type, tableData: type === 'table' ? [['', ''], ['', '']] : undefined } : r);
           if (type === 'table' && prev.activeRowId === id) {
@@ -209,6 +272,7 @@ export const useEditorState = () => {
           break;
         }
         case 'INSERT_MULTIPLE_ROWS': {
+          recordHistory(false);
           const { afterId, newRows } = action.payload;
           const idx = prev.rows.findIndex(r => r.id === afterId);
           if (idx !== -1) {
@@ -219,6 +283,7 @@ export const useEditorState = () => {
           break;
         }
         case 'REPLACE_ROW_WITH_MULTIPLE': {
+          recordHistory(false);
           const { id, newRows } = action.payload;
           const idx = prev.rows.findIndex(r => r.id === id);
           if (idx !== -1) {
