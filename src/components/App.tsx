@@ -34,7 +34,7 @@ export const App = () => {
   useEffect(() => {
     try {
       const templates = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
-      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf' && t.name !== 'bsfebf');
+      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf' && t.name !== 'bsfebf' && t.name !== 'strategy');
       if (filtered.length !== templates.length) {
         localStorage.setItem('litedoc_templates', JSON.stringify(filtered));
       }
@@ -630,7 +630,7 @@ export const App = () => {
               <input 
                 id="save-command-input"
                 autoFocus
-                placeholder="command_name"
+                placeholder="command_name(<10 chars)"
                 style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1, minWidth: '120px' }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -660,7 +660,7 @@ export const App = () => {
               <div style={{ width: '1px', height: '1.2rem', background: 'var(--text-muted)', opacity: 0.3, margin: '0 4px' }} />
               <input
                 id="save-command-desc"
-                placeholder="<20 characters"
+                placeholder="description(<20 chars)"
                 maxLength={20}
                 style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', outline: 'none', flexGrow: 2, fontSize: '0.9em', minWidth: '120px' }}
                 onKeyDown={(e) => {
