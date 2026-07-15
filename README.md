@@ -1,6 +1,8 @@
 # LiteDoc
 
 > A fast, keyboard-first, block-based document editor — built in the browser, stored locally.
+> 
+> **Try it live:** [https://litedoc-new.vercel.app/](https://litedoc-new.vercel.app/)
 
 ---
 
