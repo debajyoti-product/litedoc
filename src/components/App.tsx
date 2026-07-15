@@ -34,7 +34,7 @@ export const App = () => {
   useEffect(() => {
     try {
       const templates = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
-      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf' && t.name !== 'bsfebf' && t.name !== 'strategy');
+      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf' && t.name !== 'bsfebf');
       if (filtered.length !== templates.length) {
         localStorage.setItem('litedoc_templates', JSON.stringify(filtered));
       }
@@ -144,18 +144,6 @@ export const App = () => {
         createRow('bullet', 'Clarifying questions', row.indentLevel),
         createRow('bullet', 'External issues', row.indentLevel),
         createRow('bullet', 'Product issues', row.indentLevel),
-      ];
-      if (newContent.trim() === '') {
-        dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });
-      } else {
-        dispatch({ type: 'INSERT_MULTIPLE_ROWS', payload: { afterId: rowId, newRows: templateRows } });
-      }
-    } else if (cmdId === 'strategy') {
-      const templateRows = [
-        createRow('bullet', 'Clarification', row.indentLevel, undefined, '(think about objective, users, competitors, product details, value prop)'),
-        createRow('bullet', 'Vision', row.indentLevel, undefined, '(what do you want the product to be in long term)'),
-        createRow('bullet', 'Pillars', row.indentLevel, undefined, '(prioritzed list of initiatives to achieve goal/s)'),
-        createRow('bullet', 'Metrics', row.indentLevel, undefined, '(NSM & 2-3 L2 metrics)'),
       ];
       if (newContent.trim() === '') {
         dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });

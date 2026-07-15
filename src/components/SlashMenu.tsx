@@ -20,8 +20,7 @@ export const getCommands = () => {
     { id: 'bullet', label: '/bullet', desc: 'bulleted list' },
     { id: 'help', label: '/help', desc: 'help doc' },
     { id: 'design', label: '/design', desc: 'product design' },
-    { id: 'rca', label: '/rca', desc: 'root cause analysis' },
-    { id: 'strategy', label: '/strategy', desc: 'product strategy' }
+    { id: 'rca', label: '/rca', desc: 'root cause analysis' }
   ];
   try {
     const custom = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
