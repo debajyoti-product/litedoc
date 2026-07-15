@@ -138,6 +138,18 @@ export const App = () => {
       } else {
         dispatch({ type: 'INSERT_MULTIPLE_ROWS', payload: { afterId: rowId, newRows: templateRows } });
       }
+    } else if (cmdId === 'strategy') {
+      const templateRows = [
+        createRow('bullet', 'Clarification', row.indentLevel, undefined, '(think about objective, users, competitors, product details, value prop)'),
+        createRow('bullet', 'Vision', row.indentLevel, undefined, '(what do you want the product to be in long term)'),
+        createRow('bullet', 'Pillars', row.indentLevel, undefined, '(prioritzed list of initiatives to achieve goal/s)'),
+        createRow('bullet', 'Metrics', row.indentLevel, undefined, '(NSM & 2-3 L2 metrics)'),
+      ];
+      if (newContent.trim() === '') {
+        dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });
+      } else {
+        dispatch({ type: 'INSERT_MULTIPLE_ROWS', payload: { afterId: rowId, newRows: templateRows } });
+      }
     } else if (cmdId === 'rca') {
       const templateRows = [
         createRow('bullet', 'Problem statement', row.indentLevel),
@@ -631,7 +643,7 @@ export const App = () => {
                 id="save-command-input"
                 autoFocus
                 placeholder="command_name(<10 chars)"
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1, minWidth: '120px' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1, minWidth: '160px' }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -662,7 +674,7 @@ export const App = () => {
                 id="save-command-desc"
                 placeholder="description(<20 chars)"
                 maxLength={20}
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', outline: 'none', flexGrow: 2, fontSize: '0.9em', minWidth: '120px' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', outline: 'none', flexGrow: 2, fontSize: '0.9em', minWidth: '180px' }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
