@@ -18,19 +18,6 @@ Most editors are either too heavy (Notion requires an account and a network) or 
 
 ---
 
-## Quick Start
-
-```bash
-git clone https://github.com/your-username/litedoc.git
-cd litedoc
-npm install
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
----
-
 ## Keyboard Shortcuts
 
 ### Navigation
