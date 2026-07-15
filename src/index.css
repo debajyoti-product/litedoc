@@ -57,8 +57,8 @@ body {
 }
 
 .editor-container {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 900px;
+  margin-left: max(2rem, 15vw);
   padding: 4rem 2rem;
   outline: none;
 }
