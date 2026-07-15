@@ -32,6 +32,14 @@ export const App = () => {
   }, [cursorToRestore]);
 
   useEffect(() => {
+    try {
+      const templates = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
+      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf');
+      if (filtered.length !== templates.length) {
+        localStorage.setItem('litedoc_templates', JSON.stringify(filtered));
+      }
+    } catch(e) {}
+
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-mode');
     }
@@ -605,12 +613,13 @@ export const App = () => {
               </button>
             </>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
               <span style={{ color: 'var(--text-muted)' }}>/</span>
               <input 
+                id="save-command-input"
                 autoFocus
                 placeholder="command_name"
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -634,6 +643,35 @@ export const App = () => {
                   }
                 }}
               />
+              <button 
+                onClick={() => {
+                  const el = document.getElementById('save-command-input') as HTMLInputElement;
+                  if (!el) return;
+                  const templateName = el.value.trim();
+                  if (templateName) {
+                    const anchorIdx = state.rows.findIndex(r => r.id === state.selection.anchorRowId);
+                    const focusIdx = state.rows.findIndex(r => r.id === state.selection.focusRowId);
+                    if (anchorIdx !== -1 && focusIdx !== -1) {
+                      const minIdx = Math.min(anchorIdx, focusIdx);
+                      const maxIdx = Math.max(anchorIdx, focusIdx);
+                      const selectedRows = state.rows.slice(minIdx, maxIdx + 1);
+                      const existing = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
+                      existing.push({ name: templateName, rows: selectedRows });
+                      localStorage.setItem('litedoc_templates', JSON.stringify(existing));
+                    }
+                    dispatch({ type: 'SET_SELECTION', payload: { active: false, anchorRowId: null, anchorBlockIndex: null, focusRowId: null, focusBlockIndex: null } });
+                  }
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '4px',
+                  padding: '4px 8px', background: 'var(--selection-bg)', 
+                  border: '1px solid var(--border-color)', borderRadius: '4px', 
+                  fontSize: '0.8rem', color: 'var(--text-muted)', cursor: 'pointer',
+                  marginLeft: 'auto'
+                }}
+              >
+                <span style={{ fontSize: '1rem', lineHeight: 1 }}>↵</span> Enter
+              </button>
             </div>
           )}
         </div>

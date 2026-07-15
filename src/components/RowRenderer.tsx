@@ -215,7 +215,7 @@ export const RowRenderer = React.memo(({
       </div>
 
       {row.hint && (
-        <span className="row-hint" style={{ color: '#888', fontSize: '85%', marginLeft: '8px', transform: `translateX(${row.content === 'Metrics' ? '-50%' : '-20%'})`, pointerEvents: 'none', userSelect: 'none', flexShrink: 0 }}>
+        <span className="row-hint" style={{ color: '#888', fontSize: '85%', marginLeft: '8px', transform: `translateX(${row.content === 'Metrics' ? '-40%' : '-20%'})`, pointerEvents: 'none', userSelect: 'none', flexShrink: 0 }}>
           {row.hint}
         </span>
       )}
