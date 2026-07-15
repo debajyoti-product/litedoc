@@ -8,12 +8,13 @@
  */
 import type { Row, RowType } from '../types';
 
-export const createRow = (type: RowType = 'text', content: string = '', indentLevel: number = 0, tableData?: string[][]): Row => ({
+export const createRow = (type: RowType = 'text', content: string = '', indentLevel: number = 0, tableData?: string[][], hint?: string): Row => ({
   id: crypto.randomUUID(),
   type,
   content,
   indentLevel,
   tableData: type === 'table' ? (tableData || [['', ''], ['', '']]) : undefined,
+  hint,
 });
 
 export const splitIntoWordBlocks = (text: string) => {

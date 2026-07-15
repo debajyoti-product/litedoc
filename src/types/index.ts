@@ -6,6 +6,7 @@ export interface Row {
   indentLevel: number; // 0-5
   content: string; // Tokenized by words in the UI
   tableData?: string[][]; // 2D array for table cells
+  hint?: string; // Optional grayed out hint text
 }
 
 export interface SelectionState {

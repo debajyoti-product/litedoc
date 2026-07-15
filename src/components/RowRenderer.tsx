@@ -197,6 +197,11 @@ export const RowRenderer = React.memo(({
         onFocus={handleFocus}
         placeholder={placeholder || (isActive ? "..." : "")}
       />
+      {row.hint && (
+        <span className="row-hint" style={{ color: '#888', fontSize: '80%', marginLeft: '10px', pointerEvents: 'none', userSelect: 'none', flexShrink: 0 }}>
+          {row.hint}
+        </span>
+      )}
       {mathResult && (
         <span className="math-result" style={{ marginLeft: '10px', color: 'var(--accent-color)', fontWeight: 'bold' }}>
           <InlineMath math={mathResult} />
