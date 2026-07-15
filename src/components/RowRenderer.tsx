@@ -22,6 +22,7 @@ interface RowProps {
   onFocus: (id: string) => void;
   placeholder?: string;
   activeTableCell?: {r: number, c: number} | null;
+  slashMenuState?: { isOpen: boolean, rowId: string | null, filter: string, selectedIndex: number };
   isMultiSelected?: boolean;
   onCellChange?: (id: string, r: number, c: number, newContent: string) => void;
   onCellKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>, id: string, r: number, c: number, cursorPosition: number) => void;
@@ -238,6 +239,9 @@ export const RowRenderer = React.memo(({
     prev.isMultiSelected === next.isMultiSelected &&
     (!prev.isActive && !next.isActive && !prev.isMultiSelected && !next.isMultiSelected ? true : prev.selection === next.selection) &&
     (!prev.isActive && !next.isActive ? true : 
-      (prev.activeTableCell?.r === next.activeTableCell?.r && prev.activeTableCell?.c === next.activeTableCell?.c))
+      (prev.activeTableCell?.r === next.activeTableCell?.r && prev.activeTableCell?.c === next.activeTableCell?.c &&
+       prev.slashMenuState?.isOpen === next.slashMenuState?.isOpen && 
+       prev.slashMenuState?.selectedIndex === next.slashMenuState?.selectedIndex &&
+       prev.slashMenuState?.filter === next.slashMenuState?.filter))
   );
 });

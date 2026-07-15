@@ -749,6 +749,7 @@ export const App = () => {
               onFocus={handleRowFocus}
               placeholder={placeholder}
               activeTableCell={state.activeTableCell}
+              slashMenuState={isActive ? state.slashMenuState : undefined}
               onCellChange={handleCellChange}
               onCellKeyDown={handleCellKeyDown}
               onCellFocus={handleCellFocus}
