@@ -111,7 +111,7 @@ export const App = () => {
         createRow('bullet', 'User segments', row.indentLevel),
         t1,
         t2,
-        createRow('bullet', 'Metrics', row.indentLevel),
+        createRow('bullet', 'Metrics', row.indentLevel, undefined, '(think about a NSM & 2-3 L2 metrics)'),
       ];
       if (newContent.trim() === '') {
         dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });
