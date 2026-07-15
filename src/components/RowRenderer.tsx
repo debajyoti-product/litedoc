@@ -182,23 +182,40 @@ export const RowRenderer = React.memo(({
   }
 
   return (
-    <div className={`row-container ${row.type}`} style={indentStyle}>
+    <div 
+      className={`row-container ${row.type}`} 
+      style={indentStyle}
+      onClick={(e) => {
+        // Only focus if they didn't click on another interactive element
+        if ((e.target as HTMLElement).tagName !== 'INPUT') {
+          inputRef.current?.focus();
+        }
+      }}
+    >
       <span className="row-number">{index + 1}</span>
       {row.type === 'bullet' && <span className="type-icon" style={{ marginRight: '8px' }}>•</span>}
       {row.type === 'math' && <span className="type-icon" style={{ marginRight: '8px', opacity: 0.5 }}>∑</span>}
-      <input
-        id={`input-${row.id}`}
-        ref={inputRef}
-        type="text"
-        className="row-input"
-        value={row.content}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        placeholder={placeholder || (isActive ? "..." : "")}
-      />
+      
+      <div style={{ display: 'inline-grid', alignItems: 'center' }}>
+        <span style={{ visibility: 'hidden', gridArea: '1 / 1', whiteSpace: 'pre' }}>
+          {row.content || placeholder || (isActive ? "..." : "")}
+        </span>
+        <input
+          id={`input-${row.id}`}
+          ref={inputRef}
+          type="text"
+          className="row-input"
+          style={{ gridArea: '1 / 1', width: '100%', minWidth: '2px' }}
+          value={row.content}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onFocus={handleFocus}
+          placeholder={placeholder || (isActive ? "..." : "")}
+        />
+      </div>
+
       {row.hint && (
-        <span className="row-hint" style={{ color: '#888', fontSize: '80%', marginLeft: '10px', pointerEvents: 'none', userSelect: 'none', flexShrink: 0 }}>
+        <span className="row-hint" style={{ color: '#888', fontSize: '85%', marginLeft: '8px', pointerEvents: 'none', userSelect: 'none', flexShrink: 0 }}>
           {row.hint}
         </span>
       )}
