@@ -34,8 +34,31 @@ export const App = () => {
   useEffect(() => {
     try {
       const templates = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
+      let modified = false;
       const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf' && t.name !== 'bsfebf');
-      if (filtered.length !== templates.length) {
+      filtered.forEach((t: any) => {
+        if (t.name === 'strategy' && Array.isArray(t.rows)) {
+          t.rows.forEach((r: any) => {
+            if (r.type === 'bullet') {
+              const c = r.content.toLowerCase().trim();
+              if (c === 'clarification' && !r.hint) {
+                r.hint = '(think about objective, users, competitors, product details, value prop)';
+                modified = true;
+              } else if (c === 'vision' && !r.hint) {
+                r.hint = '(what do you want the product to be in long term)';
+                modified = true;
+              } else if (c === 'pillars' && !r.hint) {
+                r.hint = '(prioritzed list of initiatives to achieve goal/s)';
+                modified = true;
+              } else if (c === 'metrics' && !r.hint) {
+                r.hint = '(NSM & 2-3 L2 metrics)';
+                modified = true;
+              }
+            }
+          });
+        }
+      });
+      if (filtered.length !== templates.length || modified) {
         localStorage.setItem('litedoc_templates', JSON.stringify(filtered));
       }
     } catch(e) {}
