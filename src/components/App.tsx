@@ -34,7 +34,7 @@ export const App = () => {
   useEffect(() => {
     try {
       const templates = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
-      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf');
+      const filtered = templates.filter((t: any) => t.name !== 'bfjsbjf' && t.name !== 'bsfebf');
       if (filtered.length !== templates.length) {
         localStorage.setItem('litedoc_templates', JSON.stringify(filtered));
       }
