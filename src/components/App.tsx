@@ -138,24 +138,24 @@ export const App = () => {
       } else {
         dispatch({ type: 'INSERT_MULTIPLE_ROWS', payload: { afterId: rowId, newRows: templateRows } });
       }
-    } else if (cmdId === 'strategy') {
-      const templateRows = [
-        createRow('bullet', 'Clarification', row.indentLevel, undefined, '(think about objective, users, competitors, product details, value prop)'),
-        createRow('bullet', 'Vision', row.indentLevel, undefined, '(what do you want the product to be in long term)'),
-        createRow('bullet', 'Pillars', row.indentLevel, undefined, '(prioritzed list of initiatives to achieve goal/s)'),
-        createRow('bullet', 'Metrics', row.indentLevel, undefined, '(NSM & 2-3 L2 metrics)'),
-      ];
-      if (newContent.trim() === '') {
-        dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });
-      } else {
-        dispatch({ type: 'INSERT_MULTIPLE_ROWS', payload: { afterId: rowId, newRows: templateRows } });
-      }
     } else if (cmdId === 'rca') {
       const templateRows = [
         createRow('bullet', 'Problem statement', row.indentLevel),
         createRow('bullet', 'Clarifying questions', row.indentLevel),
         createRow('bullet', 'External issues', row.indentLevel),
         createRow('bullet', 'Product issues', row.indentLevel),
+      ];
+      if (newContent.trim() === '') {
+        dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });
+      } else {
+        dispatch({ type: 'INSERT_MULTIPLE_ROWS', payload: { afterId: rowId, newRows: templateRows } });
+      }
+    } else if (cmdId === 'strategy') {
+      const templateRows = [
+        createRow('bullet', 'Clarification', row.indentLevel, undefined, '(think about objective, users, competitors, product details, value prop)'),
+        createRow('bullet', 'Vision', row.indentLevel, undefined, '(what do you want the product to be in long term)'),
+        createRow('bullet', 'Pillars', row.indentLevel, undefined, '(prioritzed list of initiatives to achieve goal/s)'),
+        createRow('bullet', 'Metrics', row.indentLevel, undefined, '(NSM & 2-3 L2 metrics)'),
       ];
       if (newContent.trim() === '') {
         dispatch({ type: 'REPLACE_ROW_WITH_MULTIPLE', payload: { id: rowId, newRows: templateRows } });
@@ -643,7 +643,7 @@ export const App = () => {
                 id="save-command-input"
                 autoFocus
                 placeholder="command_name(<10 chars)"
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1, minWidth: '160px' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1, minWidth: '180px' }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
