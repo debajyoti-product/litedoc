@@ -631,13 +631,15 @@ export const App = () => {
                 id="save-command-input"
                 autoFocus
                 placeholder="command_name"
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1 }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-color)', outline: 'none', flexGrow: 1, minWidth: '120px' }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
-                    const templateName = e.currentTarget.value.trim();
+                    const elName = document.getElementById('save-command-input') as HTMLInputElement;
+                    const elDesc = document.getElementById('save-command-desc') as HTMLInputElement;
+                    const templateName = elName?.value.trim();
+                    const templateDesc = elDesc?.value.trim();
                     if (templateName) {
-                      // Save template logic
                       const anchorIdx = state.rows.findIndex(r => r.id === state.selection.anchorRowId);
                       const focusIdx = state.rows.findIndex(r => r.id === state.selection.focusRowId);
                       if (anchorIdx !== -1 && focusIdx !== -1) {
@@ -645,7 +647,38 @@ export const App = () => {
                         const maxIdx = Math.max(anchorIdx, focusIdx);
                         const selectedRows = state.rows.slice(minIdx, maxIdx + 1);
                         const existing = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
-                        existing.push({ name: templateName, rows: selectedRows });
+                        existing.push({ name: templateName, description: templateDesc, rows: selectedRows });
+                        localStorage.setItem('litedoc_templates', JSON.stringify(existing));
+                      }
+                      dispatch({ type: 'SET_SELECTION', payload: { active: false, anchorRowId: null, anchorBlockIndex: null, focusRowId: null, focusBlockIndex: null } });
+                    }
+                  } else if (e.key === 'Escape') {
+                    dispatch({ type: 'SET_SELECTION_MENU', payload: { step: 'main' } });
+                  }
+                }}
+              />
+              <div style={{ width: '1px', height: '1.2rem', background: 'var(--text-muted)', opacity: 0.3, margin: '0 4px' }} />
+              <input
+                id="save-command-desc"
+                placeholder="<20 characters"
+                maxLength={20}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', outline: 'none', flexGrow: 2, fontSize: '0.9em', minWidth: '120px' }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const elName = document.getElementById('save-command-input') as HTMLInputElement;
+                    const elDesc = document.getElementById('save-command-desc') as HTMLInputElement;
+                    const templateName = elName?.value.trim();
+                    const templateDesc = elDesc?.value.trim();
+                    if (templateName) {
+                      const anchorIdx = state.rows.findIndex(r => r.id === state.selection.anchorRowId);
+                      const focusIdx = state.rows.findIndex(r => r.id === state.selection.focusRowId);
+                      if (anchorIdx !== -1 && focusIdx !== -1) {
+                        const minIdx = Math.min(anchorIdx, focusIdx);
+                        const maxIdx = Math.max(anchorIdx, focusIdx);
+                        const selectedRows = state.rows.slice(minIdx, maxIdx + 1);
+                        const existing = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
+                        existing.push({ name: templateName, description: templateDesc, rows: selectedRows });
                         localStorage.setItem('litedoc_templates', JSON.stringify(existing));
                       }
                       dispatch({ type: 'SET_SELECTION', payload: { active: false, anchorRowId: null, anchorBlockIndex: null, focusRowId: null, focusBlockIndex: null } });
@@ -657,9 +690,10 @@ export const App = () => {
               />
               <button 
                 onClick={() => {
-                  const el = document.getElementById('save-command-input') as HTMLInputElement;
-                  if (!el) return;
-                  const templateName = el.value.trim();
+                  const elName = document.getElementById('save-command-input') as HTMLInputElement;
+                  const elDesc = document.getElementById('save-command-desc') as HTMLInputElement;
+                  const templateName = elName?.value.trim();
+                  const templateDesc = elDesc?.value.trim();
                   if (templateName) {
                     const anchorIdx = state.rows.findIndex(r => r.id === state.selection.anchorRowId);
                     const focusIdx = state.rows.findIndex(r => r.id === state.selection.focusRowId);
@@ -668,7 +702,7 @@ export const App = () => {
                       const maxIdx = Math.max(anchorIdx, focusIdx);
                       const selectedRows = state.rows.slice(minIdx, maxIdx + 1);
                       const existing = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
-                      existing.push({ name: templateName, rows: selectedRows });
+                      existing.push({ name: templateName, description: templateDesc, rows: selectedRows });
                       localStorage.setItem('litedoc_templates', JSON.stringify(existing));
                     }
                     dispatch({ type: 'SET_SELECTION', payload: { active: false, anchorRowId: null, anchorBlockIndex: null, focusRowId: null, focusBlockIndex: null } });

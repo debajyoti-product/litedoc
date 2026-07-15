@@ -15,17 +15,18 @@ interface SlashMenuProps {
 
 export const getCommands = () => {
   const base = [
-    { id: 'table', label: '/table', desc: 'Insert a table block' },
-    { id: 'math', label: '/math', desc: 'Insert inline math' },
-    { id: 'bullet', label: '/bullet', desc: 'Convert to bullet list' },
-    { id: 'help', label: '/help', desc: 'View shortcuts and docs' },
-    { id: 'design', label: '/design', desc: 'Product Design Template' },
-    { id: 'rca', label: '/rca', desc: 'RCA Template' }
+    { id: 'table', label: '/table', desc: 'table block' },
+    { id: 'math', label: '/math', desc: 'inline math' },
+    { id: 'bullet', label: '/bullet', desc: 'bulleted list' },
+    { id: 'help', label: '/help', desc: 'help doc' },
+    { id: 'design', label: '/design', desc: 'product design' },
+    { id: 'rca', label: '/rca', desc: 'root cause analysis' },
+    { id: 'strategy', label: '/strategy', desc: 'product strategy' }
   ];
   try {
     const custom = JSON.parse(localStorage.getItem('litedoc_templates') || '[]');
     custom.forEach((t: any) => {
-      base.push({ id: t.name, label: `/${t.name}`, desc: 'Custom Command' });
+      base.push({ id: t.name, label: `/${t.name}`, desc: t.description || 'custom command' });
     });
   } catch(e) {}
   return base;
