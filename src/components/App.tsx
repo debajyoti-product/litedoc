@@ -106,7 +106,7 @@ export const App = () => {
 
       const templateRows = [
         createRow('bullet', 'Problem statement', row.indentLevel),
-        createRow('bullet', 'Clarifying questions', row.indentLevel, undefined, '(consider asking about purpose, goal, scale, platform, alternatives, constraints)'),
+        createRow('bullet', 'Clarification', row.indentLevel, undefined, '(think about purpose, goal, scale, platform, alternatives, constraints)'),
         createRow('bullet', 'Objective', row.indentLevel),
         createRow('bullet', 'User segments', row.indentLevel),
         t1,
