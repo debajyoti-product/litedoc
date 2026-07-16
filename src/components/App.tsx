@@ -41,17 +41,21 @@ export const App = () => {
           t.rows.forEach((r: any) => {
             if (r.type === 'bullet') {
               const c = r.content.toLowerCase().trim();
-              if (c === 'clarification' && !r.hint) {
-                r.hint = '(think about objective, users, competitors, product details, value prop)';
+              if (c === 'clarification') {
+                if (!r.hint) r.hint = '(think about objective, users, competitors, product details, value prop)';
+                if (r.content !== r.content.trim()) { r.content = r.content.trim(); }
                 modified = true;
-              } else if (c === 'vision' && !r.hint) {
-                r.hint = '(what do you want the product to be in long term)';
+              } else if (c === 'vision') {
+                if (!r.hint) r.hint = '(what do you want the product to be in long term)';
+                if (r.content !== r.content.trim()) { r.content = r.content.trim(); }
                 modified = true;
-              } else if (c === 'pillars' && !r.hint) {
-                r.hint = '(prioritzed list of initiatives to achieve goal/s)';
+              } else if (c === 'pillars') {
+                if (!r.hint) r.hint = '(prioritzed list of initiatives to achieve goal/s)';
+                if (r.content !== r.content.trim()) { r.content = r.content.trim(); }
                 modified = true;
-              } else if (c === 'metrics' && !r.hint) {
-                r.hint = '(NSM & 2-3 L2 metrics)';
+              } else if (c === 'metrics') {
+                if (!r.hint) r.hint = '(NSM & 2-3 L2 metrics)';
+                if (r.content !== r.content.trim()) { r.content = r.content.trim(); }
                 modified = true;
               }
             }
